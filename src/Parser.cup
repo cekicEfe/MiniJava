@@ -1,0 +1,130 @@
+
+package parser;
+
+import java_cup.runtime.Symbol;
+
+terminal CLASS, PUBLIC, STATIC, VOID, MAIN, STRING, EXTENDS;
+terminal RETURN, INT, BOOLEAN, IF, ELSE, WHILE, THIS, NEW;
+terminal TRUE, FALSE, PRINTLN ,LENGTH;
+terminal PLUS, MINUS, TIMES, DIVIDE;
+terminal LT, GT, LE, GE, EQ, NE;
+terminal AND, OR, NOT;
+terminal ASSIGN;
+terminal SEMI, COMMA, DOT;
+terminal LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK;
+
+terminal Integer NUM;
+terminal String ID;
+
+/*  >>> THIS PART MUST EXIST <<<  */
+non terminal Program ;
+non terminal MainClass ;
+non terminal ClassDeclList ;
+non terminal ClassDecl ;
+non terminal VarDeclList ;
+non terminal VarDecl ;
+non terminal MethodDeclList ;
+non terminal MethodDecl ;
+
+non terminal StatementList ;
+non terminal Statement ;
+
+non terminal Exp ;
+non terminal ExpList ;
+
+non terminal Type ;
+
+start with Program;
+
+/* -------------------------------------------------------------------
+   Grammar rules
+------------------------------------------------------------------- */
+
+Program ::= MainClass ClassDeclList ;
+
+MainClass ::=
+    CLASS ID LBRACE
+      PUBLIC STATIC VOID MAIN LPAREN STRING LBRACK RBRACK ID RPAREN
+      LBRACE StatementList RBRACE
+    RBRACE
+    ;
+
+ClassDeclList ::=
+    /* empty */
+  | ClassDeclList ClassDecl
+  ;
+
+ClassDecl ::=
+    CLASS ID LBRACE
+      VarDeclList MethodDeclList
+    RBRACE
+  | CLASS ID EXTENDS ID LBRACE
+      VarDeclList MethodDeclList
+    RBRACE
+  ;
+
+VarDeclList ::=
+    /* empty */
+  | VarDeclList VarDecl
+  ;
+
+VarDecl ::=
+    Type ID SEMI
+  ;
+
+MethodDeclList ::=
+    /* empty */
+  | MethodDeclList MethodDecl
+  ;
+
+MethodDecl ::=
+    PUBLIC Type ID LPAREN ExpList RPAREN
+    LBRACE VarDeclList StatementList RETURN Exp SEMI RBRACE
+  ;
+
+Type ::=
+    INT LBRACK RBRACK
+  | BOOLEAN
+  | INT
+  | ID
+  ;
+
+StatementList ::=
+    /* empty */
+  | StatementList Statement
+  ;
+
+Statement ::=
+    LBRACE StatementList RBRACE
+  | IF LPAREN Exp RPAREN Statement ELSE Statement
+  | WHILE LPAREN Exp RPAREN Statement
+  | PRINTLN LPAREN Exp RPAREN SEMI
+  | ID ASSIGN Exp SEMI
+  | ID LBRACK Exp RBRACK ASSIGN Exp SEMI
+  ;
+
+ExpList ::=
+    /* empty */
+  | Exp
+  | ExpList COMMA Exp
+  ;
+
+Exp ::=
+    Exp AND Exp
+  | Exp LT Exp
+  | Exp PLUS Exp
+  | Exp MINUS Exp
+  | Exp TIMES Exp
+  | Exp LBRACK Exp RBRACK
+  | Exp DOT LENGTH
+  | Exp DOT ID LPAREN ExpList RPAREN 
+  | NUM
+  | TRUE
+  | FALSE
+  | ID
+  | THIS
+  | NEW INT LBRACK Exp RBRACK
+  | NEW ID LPAREN RPAREN
+  | NOT Exp
+  | LPAREN Exp LPAREN  
+  ;
