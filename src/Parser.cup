@@ -1,7 +1,5 @@
-
-package parser;
-
-import java_cup.runtime.Symbol;
+package example;
+class Parser;
 
 terminal CLASS, PUBLIC, STATIC, VOID, MAIN, STRING, EXTENDS;
 terminal RETURN, INT, BOOLEAN, IF, ELSE, WHILE, THIS, NEW;
@@ -16,7 +14,6 @@ terminal LPAREN, RPAREN, LBRACE, RBRACE, LBRACK, RBRACK;
 terminal Integer NUM;
 terminal String ID;
 
-/*  >>> THIS PART MUST EXIST <<<  */
 non terminal Program ;
 non terminal MainClass ;
 non terminal ClassDeclList ;
@@ -44,7 +41,7 @@ Program ::= MainClass ClassDeclList ;
 
 MainClass ::=
     CLASS ID LBRACE
-      PUBLIC STATIC VOID MAIN LPAREN STRING LBRACK RBRACK ID RPAREN
+      PUBLIC STATIC ID MAIN LPAREN STRING LBRACK RBRACK ID RPAREN
       LBRACE StatementList RBRACE
     RBRACE
     ;
@@ -126,5 +123,5 @@ Exp ::=
   | NEW INT LBRACK Exp RBRACK
   | NEW ID LPAREN RPAREN
   | NOT Exp
-  | LPAREN Exp LPAREN  
+  | LPAREN Exp RPAREN  
   ;
